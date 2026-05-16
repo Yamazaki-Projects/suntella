@@ -17,6 +17,8 @@ export default function ContactPage() {
   const [msg, setMsg] = useState("");
   const [agree, setAgree] = useState(false);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [serverError, setServerError] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   function validate() {
@@ -29,11 +31,29 @@ export default function ContactPage() {
     return e;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length) { setErrors(errs); return; }
-    setSent(true);
+    setSending(true);
+    setServerError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...vals, message: msg }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setServerError(data.error ?? "送信に失敗しました。しばらく経ってから再度お試しください。");
+        return;
+      }
+      setSent(true);
+    } catch {
+      setServerError("通信エラーが発生しました。しばらく経ってから再度お試しください。");
+    } finally {
+      setSending(false);
+    }
   }
 
   if (sent) {
@@ -158,8 +178,14 @@ export default function ContactPage() {
               {errors.agree && <div className="field-err-msg">{errors.agree}</div>}
             </div>
 
-            <button type="submit" className="btn btn-gold" style={{ width: "100%", justifyContent: "center" }}>
-              送信する <span className="arr">→</span>
+            {serverError && (
+              <div style={{ fontSize: 13, color: "#e87070", padding: "12px 16px", background: "rgba(229,57,53,0.08)", border: "1px solid rgba(229,57,53,0.2)", borderRadius: "var(--r-md)" }}>
+                {serverError}
+              </div>
+            )}
+
+            <button type="submit" className="btn btn-gold" disabled={sending} style={{ width: "100%", justifyContent: "center", opacity: sending ? 0.7 : 1 }}>
+              {sending ? "送信中…" : <>送信する <span className="arr">→</span></>}
             </button>
           </form>
         </div>
