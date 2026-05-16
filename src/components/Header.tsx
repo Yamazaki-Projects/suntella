@@ -27,7 +27,7 @@ export default function Header() {
     <header className={`site-header${scrolled ? " scrolled" : ""}`}>
       <div className="container header-inner">
         <Link href="/" className="logo-link">
-          <span className="logo-en">SUNTELLA</span>
+          <span className="logo-en">SUNSTELLA</span>
           <span className="logo-jp">株式会社サンステラ</span>
         </Link>
 

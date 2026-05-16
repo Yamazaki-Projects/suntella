@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 const rows = [
   { label: "会社名",     value: "株式会社サンステラ" },
-  { label: "英語表記",   value: "SUNTELLA Co., Ltd." },
+  { label: "英語表記",   value: "SUNSTELLA Co., Ltd." },
   { label: "所在地",     value: "〒276-0049　千葉県八千代市緑が丘1-2-9" },
   { label: "事業内容",   value: "営業代行・営業支援／販売促進・マーケティング支援／セミナー・イベント運営／Web・EC活用支援／美容クリニック向け営業支援／事務代行・バックオフィス支援" },
   { label: "対象エリア", value: "全国（オンライン対応可）" },

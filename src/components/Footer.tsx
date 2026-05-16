@@ -15,7 +15,7 @@ export default function Footer() {
       <div className="container">
         <div className="footer-inner">
           <div>
-            <div className="footer-logo-en">SUNTELLA</div>
+            <div className="footer-logo-en">SUNSTELLA</div>
             <div className="footer-logo-jp">株式会社サンステラ</div>
             <div className="footer-tagline">企業の成長に必要な「つながり」と「仕組み」をつくります。</div>
           </div>
