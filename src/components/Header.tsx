@@ -1,19 +1,20 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const NAV = [
-  { en: "ABOUT",    jp: "会社案内",   href: "#about" },
-  { en: "SERVICE",  jp: "事業内容",   href: "#service" },
-  { en: "STRENGTH", jp: "強み",       href: "#strength" },
-  { en: "FLOW",     jp: "ご相談の流れ", href: "#flow" },
-  { en: "COMPANY",  jp: "会社概要",   href: "#company" },
-  { en: "CONTACT",  jp: "お問い合わせ", href: "#contact" },
+  { en: "ABOUT",    jp: "会社案内",     href: "/about" },
+  { en: "SERVICE",  jp: "事業内容",     href: "/service" },
+  { en: "STRENGTH", jp: "強み",         href: "/strength" },
+  { en: "FLOW",     jp: "ご相談の流れ", href: "/flow" },
+  { en: "COMPANY",  jp: "会社概要",     href: "/company" },
 ];
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen]         = useState(false);
+  const pathname                = usePathname();
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 8);
@@ -32,14 +33,24 @@ export default function Header() {
 
         <nav className="header-nav">
           {NAV.map(n => (
-            <a key={n.href} href={n.href} className="nav-item">{n.en}</a>
+            <Link
+              key={n.href}
+              href={n.href}
+              className={`nav-item${pathname === n.href ? " active" : ""}`}
+            >
+              {n.en}
+            </Link>
           ))}
         </nav>
 
         <div className="header-cta">
-          <a href="#contact" className="btn btn-gold btn-sm" style={{ padding: "10px 22px", fontSize: 13 }}>
+          <Link
+            href="/contact"
+            className={`btn btn-gold${pathname === "/contact" ? " active" : ""}`}
+            style={{ padding: "10px 22px", fontSize: 13 }}
+          >
             お問い合わせ <span className="arr">→</span>
-          </a>
+          </Link>
           <button
             className="hamburger"
             aria-label="メニュー"
@@ -51,9 +62,13 @@ export default function Header() {
       </div>
 
       {open && (
-        <div className="mobile-drawer">
+        <nav className="mobile-drawer">
+          <Link href="/" className="drawer-link" onClick={() => setOpen(false)}>
+            <span className="drawer-link-jp">トップ</span>
+            <span className="drawer-link-en">HOME</span>
+          </Link>
           {NAV.map(n => (
-            <a
+            <Link
               key={n.href}
               href={n.href}
               className="drawer-link"
@@ -61,9 +76,13 @@ export default function Header() {
             >
               <span className="drawer-link-jp">{n.jp}</span>
               <span className="drawer-link-en">{n.en}</span>
-            </a>
+            </Link>
           ))}
-        </div>
+          <Link href="/contact" className="drawer-link" onClick={() => setOpen(false)}>
+            <span className="drawer-link-jp">お問い合わせ</span>
+            <span className="drawer-link-en">CONTACT</span>
+          </Link>
+        </nav>
       )}
     </header>
   );
